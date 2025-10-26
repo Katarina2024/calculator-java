@@ -1,0 +1,56 @@
+TEST PLAN & REZULTATI – Calculator (black box)
+
+Autor: Katarina Seyfferttiz
+Repo: https://github.com/Katarina2024/calculator-java
+Datum: 26.10.2025
+
+1) Opis
+Korisnik unosi ceo aritmetički izraz (npr. "4+5" ili "10+5*4+3").
+Podržane operacije: +, -, *, / 
+Navodi kažu da postoji prioritet operatora (* i / ispred + i -). Zagrade nisu pomenute.
+
+2) Tehnike testiranja (black box)
+- Ekvivalencione klase: validni izrazi, nevalidni karakteri, prazni input, vodeći/trailing operator, deljenje nulom, razmaci, dugi brojevi, kombinacije operatora, unary minus, decimalne tačke (ako nisu podržane – nevalidno).
+- Granične vrednosti: vrlo mali/veliki brojevi, jedan operator, minimalan input.
+
+3) Okruženje
+Testirano ručno (bez pokretanja koda) – sistemsko/acceptance razmišljanje.
+Jedinični test dodat kao CalculatorTest.java (pokretanje opciono).
+
+4) Test slučajevi
+
+ID | Ulaz | Očekivani rezultat | Stvarni rezultat | Napomena
+---|------|--------------------|------------------|---------
+T01 | 4+5 | 9 | [popuni] | Osnovno sabiranje
+T02 | 10-3 | 7 | [popuni] | Oduzimanje
+T03 | 6*7 | 42 | [popuni] | Množenje
+T04 | 20/5 | 4 | [popuni] | Deljenje, celobrojno? (ako je int)
+T05 | 10+5*4+3 | 10+20+3=33 | [popuni] | Provera prioriteta (* pre +)
+T06 | 8+12/3*2 | 8+(4*2)=16 | [popuni] | Kombinacija / i * sa +
+T07 | 18/3+2*5 | 6+10=16 | [popuni] | Mešovito
+T08 | 2*2*2*2 | 16 | [popuni] | Višestruko *
+T09 | 100-10*10 | 0 | [popuni] | Prioritet
+T10 | 7/2 | 3 (ako je int) ili 3.5 (ako je double) | [popuni] | Definiše tip rezultata
+T11 | 4/0 | Greška / poruka / sprečiti krah | [popuni] | Deljenje nulom
+T12 |  12 +   3* 2  | 18 | [popuni] | Tolerancija na razmake
+T13 | -5+10 | 5 (ako je podržan unary minus) | [popuni] | Unary minus pred brojem
+T14 | 5+-2 | 3 (ako dozvoljeno) ili Greška | [popuni] | Operator + unary minus
+T15 | +5 | Greška (vodeći +) | [popuni] | Vodeći operator nevalidan
+T16 | 5/ | Greška (završava operatorom) | [popuni] | Trailing operator
+T17 | abc | Greška (nevalidni karakteri) | [popuni] | Validacija unosa
+T18 | "" (prazno) | Greška / poruka | [popuni] | Prazan input
+T19 | 2147483647+1 | Prelivanje int → Greška/neočekivano? | [popuni] | Granica tipa int
+T20 | 3.5+1.2 | 4.7 (ako su decimale podržane), inače Greška | [popuni] | Decimale
+T21 | (2+3)*4 | 20 (ako postoje zagrade), inače Greška / ignorisano | [popuni] | Zagrade
+T22 | 10--5 | 15 (ako parser dozvoli), inače Greška | [popuni] | Dva minusa
+
+5) Posmatranja / potencijalni propusti (na osnovu koda/opisa)
+- Nije jasno da li postoje: decimalni brojevi, zagrade, unary minus. Ako nisu obrađeni, očekuju se greške ili pogrešni rezultati za T13–T14–T20–T21–T22.
+- Deljenje nulom (T11) mora biti eksplicitno obrađeno (poruka korisniku umesto crash-a).
+- Razmaci u izrazu (T12) – ako parser ne „skida“ whitespace, izraz može pasti.
+- Prekoračenje opsega (T19) – ako je int, 2147483647+1 preliva.
+- Vodeći/trailing operatori (T15, T16) – nedostaje jasna poruka.
+- Nevalidni karakteri (T17) – treba validacija i poruka.
+
+6) Zaključak
+Calculator prolazi osnovnu aritmetiku i prioritet. Najveći rizici: deljenje nulom, validacija unosa (nevalidni karakteri, vodeći/trailing operator), nejasnoće oko unary minusa / decimala / zagrada i potencijalno prekoračenje tipa.
